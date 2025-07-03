@@ -12,10 +12,34 @@ library(tidyverse)
 library(primer.data)
 library(tidymodels)
 library(broom)
+library(knitr)
 ```
 
 $$
 Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_k X_k + \varepsilon
 $$
 
-Many people, exposed to Spanish speakers or not, commute to Boston as this is a significant part of U.S. congressional elections. The data we got is from an experiment from Enos (2012), and we seek to understand how Spanish speakers influence attitudes towards immigration. The commuters to Massechusetts of in the sourced data may not represent the whole U.S. population very well.
+$$
+\hat{\text{att\_end}}_i = 8.453 + 1.547 \cdot \text{treatment}_i
+$$
+
+```{r}
+#| cache: true
+fit_att <- linear_reg(engine = "lm") |> 
+  fit(att_end ~ treatment, data = trains)
+```
+
+```{r}
+cat("Regression Estimates and Confidence Intervals\n\n")
+
+# Create the table with the caption including the source
+tidy(fit_att, conf.int = TRUE) |>
+  select(term, estimate, conf.low, conf.high) |>
+  kable(
+    caption = "Estimates and 95% Confidence Intervals for Parameters\nSource: Enos (2014)",
+    digits = 3,
+    booktabs = TRUE
+  )
+```
+
+Many people, exposed to Spanish speakers or not, commute to Boston as this is a significant part of U.S. congressional elections. The data we got is from an experiment from Enos (2012), and we seek to understand how Spanish speakers influence attitudes towards immigration. The commuters to Massechusetts of in the sourced data may not represent the whole U.S. population very well. We model the immigration attitude at the end of the study, which takes values as a continuous measure of attitude, as a linear function of treatment status.
