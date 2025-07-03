@@ -13,6 +13,7 @@ library(primer.data)
 library(tidymodels)
 library(broom)
 library(knitr)
+library(marginaleffects)
 ```
 
 $$
@@ -42,4 +43,28 @@ tidy(fit_att, conf.int = TRUE) |>
   )
 ```
 
-Many people, exposed to Spanish speakers or not, commute to Boston as this is a significant part of U.S. congressional elections. The data we got is from an experiment from Enos (2012), and we seek to understand how Spanish speakers influence attitudes towards immigration. The commuters to Massechusetts of in the sourced data may not represent the whole U.S. population very well. We model the immigration attitude at the end of the study, which takes values as a continuous measure of attitude, as a linear function of treatment status.
+```{r}
+comp <- avg_comparisons(fit_att)
+
+ggplot(comp, aes(x = contrast, y = estimate)) +
+  geom_point(size = 4, color = "#2c7fb8") +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.15, color = "#2c7fb8") +
+  ylim(0, NA) +  # start y-axis at zero
+  labs(
+    title = "Effect of Treatment on Attitudinal Outcome",
+    subtitle = "Treated group shows a significant increase compared to Control, with an estimated effect of 1.55",
+    caption = "Source: Enos (2014) dataset",
+    x = "Group Comparison",
+    y = "Estimated Difference in Outcome"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", size = 16),
+    plot.subtitle = element_text(size = 12, margin = margin(b = 10)),
+    plot.caption = element_text(size = 10, face = "italic", hjust = 0),
+    axis.title = element_text(face = "bold"),
+    axis.text.x = element_text(size = 12)
+  )
+```
+
+Many people, exposed to Spanish speakers or not, commute to Boston as this is a significant part of U.S. congressional elections. The data we got is from an experiment from Enos (2012), and we seek to understand how Spanish speakers influence attitudes towards immigration. The commuters to Massechusetts of in the sourced data may not represent the whole U.S. population very well. We model the immigration attitude at the end of the study, which takes values as a continuous measure of attitude, as a linear function of treatment status. The estimated effect of the treatment on the attitudinal outcome is 1.55, with a 95% confidence interval ranging from 0.51 to 2.58, showing a statistically significant positive impact.
