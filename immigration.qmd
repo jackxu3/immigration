@@ -10,6 +10,12 @@ execute:
 #| message: false
 library(tidyverse)
 library(primer.data)
+library(tidymodels)
+library(broom)
 ```
 
-Many people, exposed to Spanish speakers or not, commute to Boston as this is a significant part of U.S. congressional elections. The data we got is from an experiment from Enos (2012), and we seek to understand how Spanish speakers influence attitudes towards immigration.
+$$
+Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_k X_k + \varepsilon
+$$
+
+Many people, exposed to Spanish speakers or not, commute to Boston as this is a significant part of U.S. congressional elections. The data we got is from an experiment from Enos (2012), and we seek to understand how Spanish speakers influence attitudes towards immigration. The commuters to Massechusetts of in the sourced data may not represent the whole U.S. population very well.
